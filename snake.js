@@ -23,34 +23,6 @@ var Snake = function(coor, dir, grid, view) {
                 return [head_x, head_y -1];
         }
     }
-
-    this.move = function move() {
-        console.log("MOVE!");
-
-        var nextCoor = this.buildNextCoor();
-        
-                console.log("nextCoor: " + nextCoor);
-        // HELLO!
-        if (this.grid[nextCoor[0]] === undefined) {
-            clearInterval(this.intervalID);
-            console.log("YOU LOSE!!");
-            return false;
-        } else if (this.grid[nextCoor[0]][nextCoor[1]] === undefined) {
-            clearInterval(this.intervalID);
-            console.log("YOU LOSE!!");
-            return false;
-            
-            // else if next coor are snake, LOSE
-            // else if next coor hasObj (food), eat
-        } else {
-            this.grid[nextCoor[0]][nextCoor[1]].setObj(this);
-            this.body.unshift(nextCoor);
-
-            var tailCoor = this.body[this.body.length - 1];
-            this.grid[tailCoor[0]][tailCoor[1]].setObj(null);
-            this.body.pop();
-        }
-    };
 }
 
 var Square = function(view) {
@@ -111,6 +83,37 @@ var Game = function(numCols, numRows) {
         return Math.floor(Math.random() * (max - min)) + min;
     };
 
+    this.move = function move(snake) {
+        var nextCoor = snake.buildNextCoor();
+        var nextCoorSqr = this.grid[nextCoor[0]][nextCoor[1]];
+
+        // If grid coor is undefined, end game.
+        if (this.grid[nextCoor[0]] === undefined) {
+            clearInterval(this.intervalID);
+            console.log("YOU LOSE!!");
+            return false;
+        } else if (nextCoorSqr === undefined) {
+            clearInterval(this.intervalID);
+            console.log("YOU LOSE!!");
+            return false;
+
+        // Else, if next coor has snake, end game.
+        } else if (nextCoorSqr.getObj()) {
+            clearInterval(this.intervalID);
+            console.log("YOU LOSE!!");
+            return false;
+            // else if next coor hasObj (which,
+            // by process of elimination would be food), eat
+        } else {
+            nextCoorSqr.setObj(snake);
+            snake.body.unshift(nextCoor);
+
+            var tailCoor = snake.body[snake.body.length - 1];
+            this.grid[tailCoor[0]][tailCoor[1]].setObj(null);
+            snake.body.pop();
+        }
+    };
+
     this.renderGrid = function() {
         var htmlStr = '<div id="grid">';
         for (var col_i in this.grid) {
@@ -157,7 +160,7 @@ $(document).ready(function() {
         if (game.isInProgress === false) {
             game.isInProgress = true;
             game.intervalID = setInterval(function(){
-                game.snk.move();
+                game.move(game.snk);
                 game.emptyDivContent();
                 game.renderGrid();
             }, 1000);
