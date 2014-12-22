@@ -83,13 +83,23 @@ var Game = function(numCols, numRows) {
             console.log("YOU LOSE!!");
             return false;
 
-        // Else, if next coor has snake, end game.
+        // Else, if nextCoorSqr has an object, and...
         } else if (nextCoorSqr.getObj()) {
-            clearInterval(this.intervalID);
-            console.log("YOU LOSE!!");
-            return false;
-            // else if next coor hasObj (which,
-            // by process of elimination would be food), eat
+
+            // ... if next coor's view is food, eat.
+            // Else, by process of elimination, nextCoorSqr has snake,
+            // so end game.
+            if (nextCoorSqr.getObj().view == "V") {
+                nextCoorSqr.setObj(snake);
+                snake.body.unshift(nextCoor);
+            } else {
+                clearInterval(this.intervalID);
+                console.log("YOU LOSE!!");
+                return false;
+            }
+
+            // Else, move snake to nextCoorSqr and set the sqr its tail was
+            // on to null.
         } else {
             nextCoorSqr.setObj(snake);
             snake.body.unshift(nextCoor);
