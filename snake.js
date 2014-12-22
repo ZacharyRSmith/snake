@@ -177,7 +177,7 @@ $(document).ready(function() {
                 game.move(game.snk);
                 game.emptyDivContent();
                 game.renderGrid();
-            }, 1000);
+            }, game.intervalTime);
         } else {
             game.isInProgress = false;
             clearInterval(game.intervalID);
