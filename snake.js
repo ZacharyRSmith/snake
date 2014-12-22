@@ -2,10 +2,6 @@ var Food = function() {
     this.view = "V";
 }
 
-// Build random coor based on grid.
-// Check that those coor are empty.
-// setObj(new Food()) on that square.
-
 var Snake = function(coor, dir, grid, view) {
     this.body = [coor];
     this.dir = dir;
@@ -68,13 +64,13 @@ var Square = function(view) {
     };
 }
 
-var Game = function() {
+var Game = function(num_cols, num_rows) {
     // INIT CODE:
     this.grid = [];
-    for (var col_i = 0; col_i < 10; col_i++) {
+    for (var col_i = 0; col_i < num_cols; col_i++) {
         var col = [];
         this.grid.push(col);
-        for (var row_i = 0; row_i < 10; row_i++) {
+        for (var row_i = 0; row_i < num_rows; row_i++) {
             var row = new Square();
             col.push(row);
         }
@@ -92,6 +88,14 @@ var Game = function() {
     this.emptyDivContent = function() {
         $('div#content').empty();
     };
+
+    this.genFood = function() {
+        
+// Build random coor based on grid.
+        
+// Check that those coor are empty.
+// setObj(new Food()) on that square.
+    }
 
     this.renderGrid = function() {
         var htmlStr = '<div id="grid">';
@@ -113,8 +117,7 @@ var Game = function() {
     };
 }
 
-var game = new Game();
-
+var game = new Game(10, 10);
 $(document).ready(function() {
     game.renderGrid();
 
