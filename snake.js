@@ -1,3 +1,11 @@
+var Food = function() {
+    this.view = "V";
+}
+
+// Build random coor based on grid.
+// Check that those coor are empty.
+// setObj(new Food()) on that square.
+
 var Snake = function(coor, dir, grid, view) {
     this.body = [coor];
     this.dir = dir;
@@ -35,6 +43,9 @@ var Snake = function(coor, dir, grid, view) {
             clearInterval(this.intervalID);
             console.log("YOU LOSE!!");
             return false;
+            
+            // else if next coor are snake, LOSE
+            // else if next coor hasObj (food), eat
         } else {
             this.grid[nextCoor[0]][nextCoor[1]].setObj(this);
             this.body.unshift(nextCoor);
@@ -57,73 +68,85 @@ var Square = function(view) {
     };
 }
 
-// CONSTRUCT GRID:
-var grid = [];
-for (var col_i = 0; col_i < 10; col_i++) {
-    var col = [];
-    grid.push(col);
-    for (var row_i = 0; row_i < 10; row_i++) {
-        var row = new Square();
-        col.push(row);
+var Game = function() {
+    // INIT CODE:
+    this.grid = [];
+    for (var col_i = 0; col_i < 10; col_i++) {
+        var col = [];
+        this.grid.push(col);
+        for (var row_i = 0; row_i < 10; row_i++) {
+            var row = new Square();
+            col.push(row);
+        }
     }
+
+    this.snk = new Snake([4,4], "right", this.grid, "O");
+    this.grid[4][4].setObj(this.snk);
+
+    // PROPS:
+    // intervalID is used to keep track of setInterval() ID.
+    this.intervalID = null;
+    this.isInProgress = false;
+
+    // METHODS:
+    this.emptyDivContent = function() {
+        $('div#content').empty();
+    };
+
+    this.renderGrid = function() {
+        var htmlStr = '<div id="grid">';
+        for (var col_i in this.grid) {
+            var col = this.grid[col_i];
+            htmlStr = htmlStr + '<div class="col">';
+
+            var rowHtmlStr = '';
+            for (var row_i in col) {
+                var row = col[row_i];
+                rowHtmlStr =
+                    '<button>' + row.getView() + '</button>' + rowHtmlStr;
+            }
+            htmlStr = htmlStr + rowHtmlStr + '</div>';
+        }
+        htmlStr = htmlStr + '</div>';
+
+        $('div#content').html(htmlStr);
+    };
 }
 
-var renderGrid = function(grid) {
-    var htmlStr = '<div id="grid">';
-    for (var col_i in grid) {
-        var col = grid[col_i];
-        htmlStr = htmlStr + '<div class="col">';
-
-        var rowHtmlStr = '';
-        for (var row_i in col) {
-            var row = col[row_i];
-            rowHtmlStr = '<button>' + row.getView() + '</button>' + rowHtmlStr;
-        }
-        htmlStr = htmlStr + rowHtmlStr + '</div>';
-    }
-    htmlStr = htmlStr + '</div>';
-
-    $('div#content').html(htmlStr);
-};
-
-// CONSTRUCT SNAKE AND SET ON GRID.
-var snk = new Snake([4,4], "right", grid, "O");
-grid[4][4].setObj(snk);
-
-var emptyDivContent = function() {
-    $('div#content').empty();
-};
+var game = new Game();
 
 $(document).ready(function() {
-    renderGrid(grid);
+    game.renderGrid();
 
     $(document).keydown(function(event){
         switch(event.keyCode) {
             case 37:
-                snk.dir = "left";
+                game.snk.dir = "left";
                 break;
             case 38:
-                snk.dir = "up";
+                game.snk.dir = "up";
                 break;
             case 39:
-                snk.dir = "right";
+                game.snk.dir = "right";
                 break;
             case 40:
-                snk.dir = "down";
+                game.snk.dir = "down";
                 break;
         }
     });
+    // If game not in progress, start.
+    // Else pause game.
     $(document).click(function(){
-        if (snk.game !== true) {
-            snk.game = true;
-            snk.intervalID = setInterval(function(){
-                snk.move();
-                emptyDivContent();
-                renderGrid(grid);
+        if (game.isInProgress === false) {
+            game.isInProgress = true;
+            game.intervalID = setInterval(function(){
+                game.snk.move();
+                game.emptyDivContent();
+                game.renderGrid();
             }, 1000);
         } else {
-            snk.game = false;
-            clearInterval(snk.intervalID);
+            game.isInProgress = false;
+            clearInterval(game.intervalID);
         }
     });
 });
