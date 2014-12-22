@@ -64,13 +64,13 @@ var Square = function(view) {
     };
 }
 
-var Game = function(num_cols, num_rows) {
+var Game = function(numCols, numRows) {
     // INIT CODE:
     this.grid = [];
-    for (var col_i = 0; col_i < num_cols; col_i++) {
+    for (var col_i = 0; col_i < numCols; col_i++) {
         var col = [];
         this.grid.push(col);
-        for (var row_i = 0; row_i < num_rows; row_i++) {
+        for (var row_i = 0; row_i < numRows; row_i++) {
             var row = new Square();
             col.push(row);
         }
@@ -83,6 +83,8 @@ var Game = function(num_cols, num_rows) {
     // intervalID is used to keep track of setInterval() ID.
     this.intervalID = null;
     this.isInProgress = false;
+    this.numCols = numCols;
+    this.numRows = numRows;
 
     // METHODS:
     this.emptyDivContent = function() {
@@ -90,12 +92,24 @@ var Game = function(num_cols, num_rows) {
     };
 
     this.genFood = function() {
-        
-// Build random coor based on grid.
-        
-// Check that those coor are empty.
-// setObj(new Food()) on that square.
-    }
+
+        // Build random coor based on grid numCols/numRows:
+        food_x = this.getRandomInt(0, this.numCols);
+        food_y = this.getRandomInt(0, this.numRows);
+        var randGridSqr = this.grid[food_x][food_y];
+
+        // If randGridSqr has no obj, place food on it.
+        // Else, look at a new randGridSqr.
+        if (randGridSqr.getObj() === null) {
+            randGridSqr.setObj(new Food());
+        } else {
+            this.genFood();
+        }
+    };
+
+    this.getRandomInt = function(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    };
 
     this.renderGrid = function() {
         var htmlStr = '<div id="grid">';
