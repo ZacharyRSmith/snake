@@ -40,6 +40,7 @@ var Game = function(numCols, numRows) {
     // PROPS:
     // intervalID is used to keep track of setInterval() ID.
     this.intervalID = null;
+    this.intervalTime = (1000/2);
     this.isInProgress = false;
     this.numCols = numCols;
     this.numRows = numRows;
@@ -92,6 +93,8 @@ var Game = function(numCols, numRows) {
             if (nextCoorSqr.getObj().view == "V") {
                 nextCoorSqr.setObj(snake);
                 snake.body.unshift(nextCoor);
+
+                this.genFood();
             } else {
                 clearInterval(this.intervalID);
                 console.log("YOU LOSE!!");
