@@ -145,7 +145,7 @@ var Game = function(numCols, numRows) {
     this.genFood();
 }
 
-var game = new Game(10, 10);
+var game = new Game(20, 20);
 $(document).ready(function() {
     game.renderGrid();
 
