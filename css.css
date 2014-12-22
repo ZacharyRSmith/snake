@@ -1,0 +1,10 @@
+.col {
+    border-style: solid;
+    border-width: 2px;
+    float: left;
+}
+
+button {
+    clear: both;
+    float: left;
+}
