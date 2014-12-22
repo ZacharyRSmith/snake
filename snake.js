@@ -37,20 +37,6 @@ var Square = function(view) {
 }
 
 var Game = function(numCols, numRows) {
-    // INIT CODE:
-    this.grid = [];
-    for (var col_i = 0; col_i < numCols; col_i++) {
-        var col = [];
-        this.grid.push(col);
-        for (var row_i = 0; row_i < numRows; row_i++) {
-            var row = new Square();
-            col.push(row);
-        }
-    }
-
-    this.snk = new Snake([4,4], "right", this.grid, "O");
-    this.grid[4][4].setObj(this.snk);
-
     // PROPS:
     // intervalID is used to keep track of setInterval() ID.
     this.intervalID = null;
@@ -132,6 +118,21 @@ var Game = function(numCols, numRows) {
 
         $('div#content').html(htmlStr);
     };
+
+    // INIT CODE:
+    this.grid = [];
+    for (var col_i = 0; col_i < numCols; col_i++) {
+        var col = [];
+        this.grid.push(col);
+        for (var row_i = 0; row_i < numRows; row_i++) {
+            var row = new Square();
+            col.push(row);
+        }
+    }
+
+    this.snk = new Snake([4,4], "right", this.grid, "O");
+    this.grid[4][4].setObj(this.snk);
+    this.genFood();
 }
 
 var game = new Game(10, 10);
