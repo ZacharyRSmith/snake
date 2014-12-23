@@ -57,22 +57,6 @@ function Game(numCols, numRows) {
         alert("Your game has ended. Your score: " + this.score + "!");
     };
 
-    this.genFood = function() {
-
-        // Build random coor based on grid numCols/numRows:
-        food_x = this.getRandomInt(0, this.numCols);
-        food_y = this.getRandomInt(0, this.numRows);
-        var randGridSqr = this.grid[food_x][food_y];
-
-        // If randGridSqr has no obj, place food on it.
-        // Else, look at a new randGridSqr.
-        if (randGridSqr.getObj() === null) {
-            randGridSqr.setObj(new Food());
-        } else {
-            this.genFood();
-        }
-    };
-
     this.getRandomInt = function(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     };
@@ -159,6 +143,22 @@ function Game(numCols, numRows) {
 
 Game.prototype = {
     constructor: Game,
+
+    genFood:function() {
+
+        // Build random coor based on grid numCols/numRows:
+        food_x = this.getRandomInt(0, this.numCols);
+        food_y = this.getRandomInt(0, this.numRows);
+        var randGridSqr = this.grid[food_x][food_y];
+
+        // If randGridSqr has no obj, place food on it.
+        // Else, look at a new randGridSqr.
+        if (randGridSqr.getObj() === null) {
+            randGridSqr.setObj(new Food());
+        } else {
+            this.genFood();
+        }
+    },
 
     renderGrid:function() {
         var htmlStr = '<div id="grid">';
