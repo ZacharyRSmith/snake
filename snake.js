@@ -37,7 +37,7 @@ var Square = function(view) {
     };
 };
 
-var Game = function(numCols, numRows) {
+function Game(numCols, numRows) {
     // PROPS:
     // intervalID is used to keep track of setInterval() ID.
     this.intervalID = null;
@@ -141,7 +141,26 @@ var Game = function(numCols, numRows) {
         this.intervalTime = this.intervalTime * factor;
     };
 
-    this.renderGrid = function() {
+    // INIT CODE:
+    this.grid = [];
+    for (var col_i = 0; col_i < numCols; col_i++) {
+        var col = [];
+        this.grid.push(col);
+        for (var row_i = 0; row_i < numRows; row_i++) {
+            var row = new Square();
+            col.push(row);
+        }
+    }
+
+    this.snake = new Snake([4,4], "right", this.grid, "O");
+    this.grid[4][4].setObj(this.snake);
+    this.genFood();
+}
+
+Game.prototype = {
+    constructor: Game,
+
+    renderGrid:function() {
         var htmlStr = '<div id="grid">';
         for (var col_i in this.grid) {
             var col = this.grid[col_i];
@@ -158,27 +177,8 @@ var Game = function(numCols, numRows) {
         htmlStr = htmlStr + '</div>';
 
         $('div#content').html(htmlStr);
-    };
-
-    // INIT CODE:
-    this.grid = [];
-    for (var col_i = 0; col_i < numCols; col_i++) {
-        var col = [];
-        this.grid.push(col);
-        for (var row_i = 0; row_i < numRows; row_i++) {
-            var row = new Square();
-            col.push(row);
-        }
     }
-
-    Game.prototype = {
-        constructor: Game
-    }
-
-    this.snake = new Snake([4,4], "right", this.grid, "O");
-    this.grid[4][4].setObj(this.snake);
-    this.genFood();
-};
+}
 
 $(document).ready(function() {
     alert(
