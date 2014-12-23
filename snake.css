@@ -7,4 +7,10 @@
 button {
     clear: both;
     float: left;
+    padding: 6px;
+}
+
+img {
+    clear: both;
+    float: left;
 }

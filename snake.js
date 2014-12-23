@@ -1,12 +1,13 @@
 var Food = function() {
-    this.view = "V";
+    this.view = '<img src="http://icons.iconarchive.com/icons/fi3ur/fruitsalad/16/strawberry-icon.png" />';
 };
 
 var Snake = function(coor, dir, grid, view) {
     this.body = [coor];
     this.dir = dir;
     this.grid = grid;
-    this.view = view;
+    this.view = '<img src="http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/16/Status-user-online-icon.png" />';
+    console.log(this.view);
 
     this.buildNextCoor = function() {
         headCoor = this.body[0];
@@ -32,7 +33,7 @@ var Square = function(view) {
 //     this.view = "X";
     this.getView = function() {
         if (this.getObj()) { return this.getObj().view; }
-        else { return "."; }
+        else { return '<button> </button>'; }
     };
 };
 
@@ -44,10 +45,16 @@ var Game = function(numCols, numRows) {
     this.isInProgress = false;
     this.numCols = numCols;
     this.numRows = numRows;
+    this.score = 0;
 
     // METHODS:
     this.emptyDivContent = function() {
         $('div#content').empty();
+    };
+
+    this.endGame = function() {
+        clearInterval(this.intervalID);
+        console.log("Your game has ended. Your score: " + this.score + "!");
     };
 
     this.genFood = function() {
@@ -71,35 +78,32 @@ var Game = function(numCols, numRows) {
     };
 
     this.move = function() {
-        
-        console.log("HELLO!");
-        console.log("this.snake: " + this.snake);
-        console.log("this.grid.length: " + this.grid.length);
 
         var nextCoor = this.snake.buildNextCoor();
-        var nextCoorSqr = this.grid[nextCoor[0]][nextCoor[1]];
-
         // If grid coor is undefined, end game.
         if (this.grid[nextCoor[0]] === undefined) {
-            clearInterval(this.intervalID);
-            console.log("YOU LOSE!!");
+            this.endGame();
             return false;
-        } else if (nextCoorSqr === undefined) {
-            clearInterval(this.intervalID);
-            console.log("YOU LOSE!!");
+        } else if (this.grid[nextCoor[0]][nextCoor[1]] === undefined) {
+            this.endGame();
             return false;
+        }
 
-        // Else, if nextCoorSqr has an object, and...
-        } else if (nextCoorSqr.getObj()) {
-
+        var nextCoorSqr = this.grid[nextCoor[0]][nextCoor[1]];
+        if (nextCoorSqr.getObj()) {
             // ... if next coor's view is food, eat.
             // Else, by process of elimination, nextCoorSqr has snake,
             // so end game.
-            if (nextCoorSqr.getObj().view == "V") {
+
+            if (nextCoorSqr.getObj() instanceof Food) {
                 clearInterval(this.intervalID);
 
                 nextCoorSqr.setObj(this.snake);
                 this.snake.body.unshift(nextCoor);
+                
+                console.log("this.score: " + this.score);
+                console.log("this.snake.body.length: " + this.snake.body.length);
+                this.score = this.score + this.snake.body.length;
 
                 this.genFood();
 
@@ -117,8 +121,7 @@ var Game = function(numCols, numRows) {
                     thisGame.renderGrid();
                 }, thisGame.intervalTime);
             } else {
-                clearInterval(this.intervalID);
-                console.log("YOU LOSE!!");
+                this.endGame();
                 return false;
             }
 
@@ -148,7 +151,7 @@ var Game = function(numCols, numRows) {
             for (var row_i in col) {
                 var row = col[row_i];
                 rowHtmlStr =
-                    '<button>' + row.getView() + '</button>' + rowHtmlStr;
+                    row.getView() + rowHtmlStr;
             }
             htmlStr = htmlStr + rowHtmlStr + '</div>';
         }
