@@ -1,6 +1,6 @@
 var Food = function() {
     this.view = "V";
-}
+};
 
 var Snake = function(coor, dir, grid, view) {
     this.body = [coor];
@@ -22,19 +22,19 @@ var Snake = function(coor, dir, grid, view) {
             case "down":
                 return [head_x, head_y -1];
         }
-    }
-}
+    };
+};
 
 var Square = function(view) {
     this.obj = null;
     this.getObj = function() { return this.obj; };
-    this.setObj = function(arg_obj) { this.obj = arg_obj; }
+    this.setObj = function(arg_obj) { this.obj = arg_obj; };
 //     this.view = "X";
     this.getView = function() {
         if (this.getObj()) { return this.getObj().view; }
         else { return "."; }
     };
-}
+};
 
 var Game = function(numCols, numRows) {
     // PROPS:
@@ -70,8 +70,13 @@ var Game = function(numCols, numRows) {
         return Math.floor(Math.random() * (max - min)) + min;
     };
 
-    this.move = function move(snake) {
-        var nextCoor = snake.buildNextCoor();
+    this.move = function() {
+        
+        console.log("HELLO!");
+        console.log("this.snake: " + this.snake);
+        console.log("this.grid.length: " + this.grid.length);
+
+        var nextCoor = this.snake.buildNextCoor();
         var nextCoorSqr = this.grid[nextCoor[0]][nextCoor[1]];
 
         // If grid coor is undefined, end game.
@@ -91,10 +96,24 @@ var Game = function(numCols, numRows) {
             // Else, by process of elimination, nextCoorSqr has snake,
             // so end game.
             if (nextCoorSqr.getObj().view == "V") {
-                nextCoorSqr.setObj(snake);
-                snake.body.unshift(nextCoor);
+                clearInterval(this.intervalID);
+
+                nextCoorSqr.setObj(this.snake);
+                this.snake.body.unshift(nextCoor);
 
                 this.genFood();
+
+                this.emptyDivContent();
+                this.renderGrid();
+
+                var thisGame = this;
+                this.intervalID = setInterval(function(){
+                    
+                    console.log("this.snake: " + thisGame.snake);
+                    thisGame.move();
+                    thisGame.emptyDivContent();
+                    thisGame.renderGrid();
+                }, thisGame.intervalTime);
             } else {
                 clearInterval(this.intervalID);
                 console.log("YOU LOSE!!");
@@ -104,12 +123,12 @@ var Game = function(numCols, numRows) {
             // Else, move snake to nextCoorSqr and set the sqr its tail was
             // on to null.
         } else {
-            nextCoorSqr.setObj(snake);
-            snake.body.unshift(nextCoor);
+            nextCoorSqr.setObj(this.snake);
+            this.snake.body.unshift(nextCoor);
 
-            var tailCoor = snake.body[snake.body.length - 1];
+            var tailCoor = this.snake.body[this.snake.body.length - 1];
             this.grid[tailCoor[0]][tailCoor[1]].setObj(null);
-            snake.body.pop();
+            this.snake.body.pop();
         }
     };
 
@@ -143,28 +162,28 @@ var Game = function(numCols, numRows) {
         }
     }
 
-    this.snk = new Snake([4,4], "right", this.grid, "O");
-    this.grid[4][4].setObj(this.snk);
+    this.snake = new Snake([4,4], "right", this.grid, "O");
+    this.grid[4][4].setObj(this.snake);
     this.genFood();
-}
+};
 
-var game = new Game(20, 20);
+var game = new Game(10, 10);
 $(document).ready(function() {
     game.renderGrid();
 
     $(document).keydown(function(event){
         switch(event.keyCode) {
             case 37:
-                game.snk.dir = "left";
+                game.snake.dir = "left";
                 break;
             case 38:
-                game.snk.dir = "up";
+                game.snake.dir = "up";
                 break;
             case 39:
-                game.snk.dir = "right";
+                game.snake.dir = "right";
                 break;
             case 40:
-                game.snk.dir = "down";
+                game.snake.dir = "down";
                 break;
         }
     });
@@ -174,7 +193,7 @@ $(document).ready(function() {
         if (game.isInProgress === false) {
             game.isInProgress = true;
             game.intervalID = setInterval(function(){
-                game.move(game.snk);
+                game.move(game.snake);
                 game.emptyDivContent();
                 game.renderGrid();
             }, game.intervalTime);
