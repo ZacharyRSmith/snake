@@ -171,6 +171,10 @@ var Game = function(numCols, numRows) {
         }
     }
 
+    Game.prototype = {
+        constructor: Game
+    }
+
     this.snake = new Snake([4,4], "right", this.grid, "O");
     this.grid[4][4].setObj(this.snake);
     this.genFood();
