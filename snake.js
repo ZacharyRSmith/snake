@@ -47,21 +47,39 @@ function Game(numCols, numRows) {
     this.numRows = numRows;
     this.score = 0;
 
-    // METHODS:
-    this.emptyDivContent = function() {
-        $('div#content').empty();
-    };
+    // INIT CODE:
+    this.grid = [];
+    for (var col_i = 0; col_i < numCols; col_i++) {
+        var col = [];
+        this.grid.push(col);
+        for (var row_i = 0; row_i < numRows; row_i++) {
+            var row = new Square();
+            col.push(row);
+        }
+    }
 
-    this.endGame = function() {
+    this.snake = new Snake([4,4], "right", this.grid, "O");
+    this.grid[4][4].setObj(this.snake);
+    this.genFood();
+}
+
+Game.prototype = {
+    constructor: Game,
+
+    emptyDivContent:function() {
+        $('div#content').empty();
+    },
+
+    endGame:function() {
         clearInterval(this.intervalID);
         alert("Your game has ended. Your score: " + this.score + "!");
-    };
+    },
 
-    this.getRandomInt = function(min, max) {
+    getRandomInt:function(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
-    };
+    },
 
-    this.move = function() {
+    move:function() {
 
         var nextCoor = this.snake.buildNextCoor();
         // If grid coor is undefined, end game.
@@ -84,7 +102,7 @@ function Game(numCols, numRows) {
 
                 nextCoorSqr.setObj(this.snake);
                 this.snake.body.unshift(nextCoor);
-                
+
                 console.log("this.score: " + this.score);
                 console.log("this.snake.body.length: " + this.snake.body.length);
                 this.score = this.score + this.snake.body.length;
@@ -98,7 +116,7 @@ function Game(numCols, numRows) {
 
                 var thisGame = this;
                 this.intervalID = setInterval(function(){
-                    
+
                     console.log("this.snake: " + thisGame.snake);
                     thisGame.move();
                     thisGame.emptyDivContent();
@@ -119,30 +137,11 @@ function Game(numCols, numRows) {
             this.grid[tailCoor[0]][tailCoor[1]].setObj(null);
             this.snake.body.pop();
         }
-    };
+    },
 
-    this.reduceIntervalTime = function(factor) {
+    reduceIntervalTime:function(factor) {
         this.intervalTime = this.intervalTime * factor;
-    };
-
-    // INIT CODE:
-    this.grid = [];
-    for (var col_i = 0; col_i < numCols; col_i++) {
-        var col = [];
-        this.grid.push(col);
-        for (var row_i = 0; row_i < numRows; row_i++) {
-            var row = new Square();
-            col.push(row);
-        }
-    }
-
-    this.snake = new Snake([4,4], "right", this.grid, "O");
-    this.grid[4][4].setObj(this.snake);
-    this.genFood();
-}
-
-Game.prototype = {
-    constructor: Game,
+    },
 
     genFood:function() {
 
