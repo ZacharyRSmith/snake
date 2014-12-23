@@ -41,7 +41,7 @@ var Game = function(numCols, numRows) {
     // PROPS:
     // intervalID is used to keep track of setInterval() ID.
     this.intervalID = null;
-    this.intervalTime = (1000/2);
+    this.intervalTime = (1000/3);
     this.isInProgress = false;
     this.numCols = numCols;
     this.numRows = numRows;
@@ -54,7 +54,7 @@ var Game = function(numCols, numRows) {
 
     this.endGame = function() {
         clearInterval(this.intervalID);
-        console.log("Your game has ended. Your score: " + this.score + "!");
+        alert("Your game has ended. Your score: " + this.score + "!");
     };
 
     this.genFood = function() {
@@ -176,8 +176,30 @@ var Game = function(numCols, numRows) {
     this.genFood();
 };
 
-var game = new Game(10, 10);
 $(document).ready(function() {
+    alert("After this message, enter in a number for this game's grid size.\n" +
+          "    (but don't make it larger than the result window!\n" +
+          "     If your games lag, you should decrease the grid size.\n" +
+          "     Stay below 15 if you like short and sweet games!)\n" +
+          "Then, click on the grid to begin your game\n" +
+          "    (you can click the grid again to pause/resume the game).\n" +
+          "...\n" +
+          "Use your arrow keys to direct the snake.\n" +
+          "Gain points by eating food.\n" +
+          "Each food is worth the current length of the snake.\n" +
+          "Your score will be shown when the game ends!\n" +
+          "The snake will start off slow, but will get faster each time it eats!\n" +
+          "...\n" +
+          "Be sure to not run the snake off the grid,\n" +
+          "    into itself, nor to turn it back onto itself\n" +
+          "    (ie, if it is going right, do not press 'left'!)\n" +
+          "    This will end the game!\n" +
+          "...\n" +
+          "Good luck! [ :\n" +
+          "-- Zach");
+
+    var size = prompt("How large do you want the grid to be?");
+    var game = new Game(size, size);
     game.renderGrid();
 
     $(document).keydown(function(event){
