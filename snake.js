@@ -177,7 +177,9 @@ var Game = function(numCols, numRows) {
 };
 
 $(document).ready(function() {
-    alert("After this message, enter in a number for this game's grid size.\n" +
+    alert("(NOTE: For best experience, play in a Chrome browser!)\n" +
+          "...\n" +
+          "After this message, enter in a number for this game's grid size.\n" +
           "    (but don't make it larger than the result window!\n" +
           "     If your games lag, you should decrease the grid size.\n" +
           "     Stay below 15 if you like short and sweet games!)\n" +
