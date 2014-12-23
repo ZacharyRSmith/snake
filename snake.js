@@ -106,6 +106,8 @@ var Game = function(numCols, numRows) {
                 this.emptyDivContent();
                 this.renderGrid();
 
+                this.reduceIntervalTime(0.9);
+
                 var thisGame = this;
                 this.intervalID = setInterval(function(){
                     
@@ -130,6 +132,10 @@ var Game = function(numCols, numRows) {
             this.grid[tailCoor[0]][tailCoor[1]].setObj(null);
             this.snake.body.pop();
         }
+    };
+
+    this.reduceIntervalTime = function(factor) {
+        this.intervalTime = this.intervalTime * factor;
     };
 
     this.renderGrid = function() {
