@@ -178,13 +178,14 @@ var Game = function(numCols, numRows) {
 
 $(document).ready(function() {
     alert("(NOTE: For best experience, play in a Chrome browser!)\n" +
-          "...\n" +
-          "After this message, enter in a number for this game's grid size.\n" +
-          "    (but don't make it larger than the result window!\n" +
-          "     If your games lag, you should decrease the grid size.\n" +
-          "     Stay below 15 if you like short and sweet games!)\n" +
-          "Then, click on the grid to begin your game\n" +
-          "    (you can click the grid again to pause/resume the game).\n" +
+          "\n" +
+//           "After this message, enter in a number for this game's grid size.\n" +
+//           "    (but don't make it larger than the result window!\n" +
+//           "     If your games lag, you should decrease the grid size.\n" +
+//           "     Stay below 15 if you like short and sweet games!)\n" +
+          "Click on the grid to begin your game!\n" +
+          "You can click the grid again to pause/resume the game.\n" +
+          "To start a new game, refresh the page!\n" +
           "...\n" +
           "Use your arrow keys to direct the snake.\n" +
           "Gain points by eating food.\n" +
@@ -200,8 +201,8 @@ $(document).ready(function() {
           "Good luck! [ :\n" +
           "-- Zach");
 
-    var size = prompt("How large do you want the grid to be?");
-    var game = new Game(size, size);
+//     var size = prompt("How large do you want the grid to be?");
+    var game = new Game(12, 12);
     game.renderGrid();
 
     $(document).keydown(function(event){
