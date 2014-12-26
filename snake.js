@@ -1,6 +1,6 @@
-var Food = function() {
-    this.view = '<img src="http://icons.iconarchive.com/icons/fi3ur/fruitsalad/16/strawberry-icon.png" />';
-};
+// var Food = function() {
+//     this.view = '<img src="http://icons.iconarchive.com/icons/fi3ur/fruitsalad/16/strawberry-icon.png" />';
+// };
 
 var Snake = function(coor, dir, grid, view) {
     this.body = [coor];
