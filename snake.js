@@ -166,10 +166,10 @@ Game.prototype = {
             htmlStr = htmlStr + '<div class="col">';
 
             var rowHtmlStr = '';
-            for (var row_i in col) {
-                var row = col[row_i];
+            for (var cell_i in col) {
+                var cell = col[cell_i];
                 rowHtmlStr =
-                    row.getView() + rowHtmlStr;
+                    cell.getView() + rowHtmlStr;
             }
             htmlStr = htmlStr + rowHtmlStr + '</div>';
         }
